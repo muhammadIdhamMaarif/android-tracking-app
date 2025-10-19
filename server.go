@@ -92,6 +92,8 @@ func locHandler(w http.ResponseWriter, r *http.Request) {
 		spd,
 	}
 
+	log.Println(rec)
+
 	if err := appendCSV(rec); err != nil {
 		log.Printf("write error: %v", err)
 		http.Error(w, "write failed", http.StatusInternalServerError)
