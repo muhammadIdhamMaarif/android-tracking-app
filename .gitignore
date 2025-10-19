@@ -1,3 +1,4 @@
+locations.csv
 *.iml
 .gradle
 /local.properties
