@@ -1,0 +1,9 @@
+services:
+  tenki-chan:
+    image: syafa/atp:latest
+    container_name: atp
+    restart: always
+    volumes:
+      - type: bind
+        source: ~/docker-volume/atp/
+        target: /app
