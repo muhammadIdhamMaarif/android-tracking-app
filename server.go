@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -13,17 +15,15 @@ import (
 const logFile = "locations.csv"
 
 type Location struct {
-	Timestamp int64    `json:"timestamp"`           // ms dari epoch
-	DeviceID  string   `json:"device_id,omitempty"` // default nya ke "unknown" kalau kosong
-	Lat       *float64 `json:"lat"`                 // required (jan diapus)
-	Lon       *float64 `json:"lon"`                 // required (jan diapus)
-	Accuracy  *float64 `json:"accuracy,omitempty"`
-	Speed     *float64 `json:"speed,omitempty"`
+	Timestamp int64    `json:"timestamp"` // ms dari epoch
+	DeviceID  string   `json:"device_id"` // default nya ke "unknown" kalau kosong
+	Lat       *float64 `json:"lat"`       // required (jan diapus)
+	Lon       *float64 `json:"lon"`       // required (jan diapus)
+	Accuracy  *float64 `json:"accuracy"`
+	Speed     *float64 `json:"speed"`
 }
 
-var (
-	csvMu sync.Mutex 
-)
+var csvMu sync.Mutex
 
 func ensureCSV() error {
 	if _, err := os.Stat(logFile); os.IsNotExist(err) {
@@ -64,7 +64,7 @@ func locHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid JSON", http.StatusBadRequest)
 		return
 	}
-	
+
 	if loc.Lat == nil || loc.Lon == nil {
 		http.Error(w, "lat and lon are required", http.StatusBadRequest)
 		return
@@ -102,17 +102,33 @@ func locHandler(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write([]byte(`{"status":"ok"}`))
 }
 
-func int64ToString(v int64) string { return json.Number(json.MarshalNumber(v)).String() }
+func int64ToString(v int64) string {
+	num, err := json.Marshal(v)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-func float64ToString(f float64) string {	
+	return string(num)
+}
+
+func float64ToString(f float64) string {
+	atest := "a"
+
+	s, err := json.Marshal(atest)
+	if err != nil {
+		fmt.Println(s)
+	}
+
 	return strconvFormatFloat(f)
 }
+
 func floatPtrToString(p *float64) string {
 	if p == nil {
 		return ""
 	}
 	return strconvFormatFloat(*p)
 }
+
 func strconvFormatFloat(f float64) string {
 	return strconv.FormatFloat(f, 'g', 15, 64)
 }
