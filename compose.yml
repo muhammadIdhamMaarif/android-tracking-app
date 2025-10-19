@@ -3,7 +3,9 @@ services:
     image: syafa/atp:latest
     container_name: atp
     restart: always
+    ports:
+      - 5000:5000
     volumes:
       - type: bind
-        source: ~/docker-volume/atp/
-        target: /app
+        source: ~/docker-volume/atp/locations.csv
+        target: /go/locations.csv
