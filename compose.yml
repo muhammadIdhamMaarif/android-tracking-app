@@ -1,6 +1,6 @@
 services:
   atp:
-    image: syafa/atp:latest
+    image: syafa/atp:staging
     container_name: atp
     restart: always
     volumes:
