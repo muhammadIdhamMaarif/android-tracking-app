@@ -1,3 +1,26 @@
+Change the API location to your server API in:
+
+```
+app/
+ └─ src/
+    └─ main/
+       └─ java/
+          └─ com/
+             └─ example/
+                └─ loclogger/
+                   └─ NetworkClient.kt
+```
+
+---
+
+👇 CHANGE THIS LINE TO YOUR SERVER URL
+
+```kotlin    
+    var SERVER_URL = "https://yourserver.example/api/loc"
+```
+
+---
+
 > Standard library imports needed:
 
 ```go
