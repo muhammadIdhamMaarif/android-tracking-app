@@ -2,9 +2,7 @@ FROM golang:latest
 
 WORKDIR /app
 
-RUN useradd -ms /bin/bash app && chown -R app:app /app
-
-COPY go.mod go.sum ./
+COPY go.mod ./
 RUN go mod download
 
 COPY . .
